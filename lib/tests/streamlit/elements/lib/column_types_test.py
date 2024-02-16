@@ -16,26 +16,14 @@ import datetime
 import unittest
 
 import pytest
-
-from streamlit.elements.lib.column_types import (
-    BarChartColumn,
-    CheckboxColumn,
-    Column,
-    DateColumn,
-    DatetimeColumn,
-    ImageColumn,
-    JsonColumn,
-    LineChartColumn,
-    LinkColumn,
-    ListColumn,
-    MultiselectColumn,
-    NumberColumn,
-    ProgressColumn,
-    SelectboxColumn,
-    TextColumn,
-    TimeColumn,
-    _validate_chart_color,
-)
+from streamlit.elements.lib.column_types import (BarChartColumn, CheckboxColumn, Column,
+                                                 DateColumn, DatetimeColumn,
+                                                 ImageColumn, JsonColumn,
+                                                 LineChartColumn, LinkColumn,
+                                                 ListColumn, MultiselectColumn,
+                                                 NumberColumn, ProgressColumn,
+                                                 SelectboxColumn, TextColumn,
+                                                 TimeColumn, _validate_chart_color)
 from streamlit.elements.lib.dicttools import remove_none_values
 from streamlit.errors import StreamlitValueError
 
@@ -390,8 +378,8 @@ class ColumnTypesTest(unittest.TestCase):
     def test_link_column(self):
         """Test LinkColumn creation."""
 
-        assert remove_none_values(LinkColumn()) == {"type_config": {"type": "link"}}, (
-            "Should only have the type defined and nothing else."
+        assert remove_none_values(LinkColumn(target="_blank")) == {"type_config": {"type": "link", "target": "_blank"}}, (
+            "Should have the defined type and target and nothing else."
         )
 
         assert remove_none_values(
@@ -406,6 +394,7 @@ class ColumnTypesTest(unittest.TestCase):
                 max_chars=100,
                 validate="^[a-zA-Z]+$",
                 display_text="streamlit",
+                target="_self",
             )
         ) == {
             "label": "Col1",
@@ -420,6 +409,7 @@ class ColumnTypesTest(unittest.TestCase):
                 "max_chars": 100,
                 "validate": "^[a-zA-Z]+$",
                 "display_text": "streamlit",
+                "target": "_self",
             },
         }, "Should have all the properties defined."
 

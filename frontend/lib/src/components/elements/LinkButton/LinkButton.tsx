@@ -42,6 +42,9 @@ function LinkButton(props: Readonly<Props>): ReactElement {
     kind = BaseButtonKind.TERTIARY
   }
 
+  // Default link target is _blank.
+  const target = "_blank"
+
   const handleClick = (e: MouseEvent<HTMLAnchorElement>): void => {
     // Prevent the link from being followed if the button is disabled.
     if (element.disabled) {
@@ -64,7 +67,7 @@ function LinkButton(props: Readonly<Props>): ReactElement {
           disabled={element.disabled}
           onClick={handleClick}
           href={element.url}
-          target="_blank"
+          target={element.target || target}
           rel="noreferrer"
           aria-disabled={element.disabled}
         >

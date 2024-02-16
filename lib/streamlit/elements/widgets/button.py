@@ -19,33 +19,15 @@ import os
 from dataclasses import dataclass
 from pathlib import Path
 from textwrap import dedent
-from typing import (
-    TYPE_CHECKING,
-    BinaryIO,
-    Final,
-    Literal,
-    TextIO,
-    Union,
-    cast,
-)
+from typing import TYPE_CHECKING, BinaryIO, Final, Literal, TextIO, Union, cast
 
-from typing_extensions import TypeAlias
-
-from streamlit import runtime
 from streamlit.elements.lib.form_utils import current_form_id, is_in_form
 from streamlit.elements.lib.layout_utils import LayoutConfig, Width, validate_width
 from streamlit.elements.lib.policies import check_widget_policies
-from streamlit.elements.lib.utils import (
-    Key,
-    compute_and_register_element_id,
-    save_for_app_testing,
-    to_key,
-)
-from streamlit.errors import (
-    StreamlitAPIException,
-    StreamlitMissingPageLabelError,
-    StreamlitPageNotFoundError,
-)
+from streamlit.elements.lib.utils import (Key, compute_and_register_element_id,
+                                          save_for_app_testing, to_key)
+from streamlit.errors import (StreamlitAPIException, StreamlitMissingPageLabelError,
+                              StreamlitPageNotFoundError)
 from streamlit.file_util import get_main_script_directory, normalize_path_join
 from streamlit.navigation.page import StreamlitPage
 from streamlit.proto.Button_pb2 import Button as ButtonProto
@@ -55,15 +37,14 @@ from streamlit.proto.PageLink_pb2 import PageLink as PageLinkProto
 from streamlit.runtime.metrics_util import gather_metrics
 from streamlit.runtime.pages_manager import PagesManager
 from streamlit.runtime.scriptrunner import ScriptRunContext, get_script_run_ctx
-from streamlit.runtime.state import (
-    WidgetArgs,
-    WidgetCallback,
-    WidgetKwargs,
-    register_widget,
-)
+from streamlit.runtime.state import (WidgetArgs, WidgetCallback, WidgetKwargs,
+                                     register_widget)
 from streamlit.string_util import validate_icon_or_emoji
 from streamlit.url_util import is_url
 from streamlit.util import in_sidebar
+from typing_extensions import TypeAlias
+
+from streamlit import runtime
 
 if TYPE_CHECKING:
     from streamlit.delta_generator import DeltaGenerator
@@ -602,6 +583,7 @@ class ButtonMixin:
         disabled: bool = False,
         use_container_width: bool | None = None,
         width: Width = "content",
+        target: Literal["_blank", "_self", "_parent", "_top"] = "_blank",
     ) -> DeltaGenerator:
         r"""Display a link button element.
 
@@ -679,7 +661,6 @@ class ButtonMixin:
 
             In both cases, if the contents of the button are wider than the
             parent container, the contents will line wrap.
-
             .. deprecated::
                 ``use_container_width`` is deprecated and will be removed in a
                 future release. For ``use_container_width=True``, use
@@ -699,6 +680,10 @@ class ButtonMixin:
               the parent container, the width of the button matches the width
               of the parent container.
 
+        target: "_blank", "_self", "_parent", "_top"
+            The target attribure specifies where to open the linked document. Can be one of "_blank", "_self", "_parent", "_top".
+            If None (default), the linked document will be opened in a new window or tab.
+            For more details, you may use `HTML documentation <https://www.w3schools.com/tags/att_a_target.asp>`.
         Example
         -------
         >>> import streamlit as st
@@ -728,6 +713,7 @@ class ButtonMixin:
             type=type,
             icon=icon,
             width=width,
+            target=target,
         )
 
     @gather_metrics("page_link")
@@ -981,12 +967,14 @@ class ButtonMixin:
         icon: str | None = None,
         disabled: bool = False,
         width: Width = "content",
+        target: Literal["_blank", "_self", "_parent", "_top"] = "_blank",
     ) -> DeltaGenerator:
         link_button_proto = LinkButtonProto()
         link_button_proto.label = label
         link_button_proto.url = url
         link_button_proto.type = type
         link_button_proto.disabled = disabled
+        link_button_proto.target = target
 
         if help is not None:
             link_button_proto.help = dedent(help)

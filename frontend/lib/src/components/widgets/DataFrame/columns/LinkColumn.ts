@@ -46,6 +46,7 @@ export interface LinkColumnParams {
    * material icon specified via ":material/icon_name:".
    */
   readonly display_text?: string
+  readonly target?: string
 }
 
 /**
@@ -107,6 +108,7 @@ function LinkColumn(props: BaseColumnProps): BaseColumn {
     hoverEffect: true,
     data: "",
     displayData: "",
+    displayTarget: "_blank",
     copyData: "",
     ...(usesDisplayIcon && {
       themeOverride: {
@@ -150,6 +152,8 @@ function LinkColumn(props: BaseColumnProps): BaseColumn {
     validateInput,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any -- TODO: Replace 'any' with a more specific type.
     getCell(data?: any, validate?: boolean): GridCell {
+      const target: string = parameters.target || "_blank"
+
       if (isNullOrUndefined(data)) {
         return {
           ...cellTemplate,
@@ -196,11 +200,12 @@ function LinkColumn(props: BaseColumnProps): BaseColumn {
         ...cellTemplate,
         data: href,
         displayData: displayText,
+        displayTarget: target,
         isMissingValue: isNullOrUndefined(href),
         onClickUri: a => {
           window.open(
             href.startsWith("www.") ? `https://${href}` : href,
-            "_blank",
+            target,
             "noopener,noreferrer"
           )
           a.preventDefault()
