@@ -91,3 +91,17 @@ class LinkButtonTest(DeltaGeneratorTestCase):
             str(e.exception),
             'The value "invalid" is not a valid emoji. Shortcodes are not allowed, please use a single character instead.',
         )
+
+    def test_target(self):
+        """Test that it can be called with target param."""
+        st.link_button("the label", url="https://streamlit.io", target="_self")
+
+        c = self.get_delta_from_queue().new_element.link_button
+        self.assertEqual(c.target, "_self")
+
+    def test_target_is_blank_by_default(self):
+        """Test target is "_blank" by default."""
+        st.link_button("the label", url="https://streamlit.io")
+
+        c = self.get_delta_from_queue().new_element.link_button
+        self.assertEqual(c.target, "_blank")

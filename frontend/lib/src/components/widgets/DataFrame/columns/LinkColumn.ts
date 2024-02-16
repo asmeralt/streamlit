@@ -33,6 +33,7 @@ export interface LinkColumnParams {
   readonly validate?: string
   // a value to display in the link cell. Can be a regex to parse out a specific substring of the url to be displayed
   readonly display_text?: string
+  readonly target?: string
 }
 
 /**
@@ -80,6 +81,7 @@ function LinkColumn(props: BaseColumnProps): BaseColumn {
     hoverEffect: true,
     data: "",
     displayData: "",
+    displayTarget: "_blank",
     copyData: "",
   } as UriCell
 
@@ -114,6 +116,8 @@ function LinkColumn(props: BaseColumnProps): BaseColumn {
     sortMode: "default",
     validateInput,
     getCell(data?: any, validate?: boolean): GridCell {
+      const target: string = parameters.target || "_blank"
+
       if (isNullOrUndefined(data)) {
         return {
           ...cellTemplate,
@@ -158,11 +162,12 @@ function LinkColumn(props: BaseColumnProps): BaseColumn {
         ...cellTemplate,
         data: href,
         displayData: displayText,
+        displayTarget: target,
         isMissingValue: isNullOrUndefined(href),
         onClickUri: a => {
           window.open(
             href.startsWith("www.") ? `https://${href}` : href,
-            "_blank",
+            target,
             "noopener,noreferrer"
           )
           a.preventDefault()

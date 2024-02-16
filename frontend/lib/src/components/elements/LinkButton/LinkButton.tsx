@@ -47,6 +47,9 @@ function LinkButton(props: Readonly<Props>): ReactElement {
   // we need to pass the container width down to the button
   const fluidWidth = element.help ? width : true
 
+  // Default link target is _blank.
+  const target = "_blank"
+
   const handleClick = (e: MouseEvent<HTMLAnchorElement>): void => {
     // Prevent the link from being followed if the button is disabled.
     if (props.disabled) {
@@ -66,7 +69,7 @@ function LinkButton(props: Readonly<Props>): ReactElement {
           onClick={handleClick}
           fluidWidth={element.useContainerWidth ? fluidWidth : false}
           href={element.url}
-          target="_blank"
+          target={element.target || target}
           rel="noreferrer"
           aria-disabled={disabled}
         >
