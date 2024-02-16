@@ -446,6 +446,7 @@ class ButtonMixin:
         icon: str | None = None,
         disabled: bool = False,
         use_container_width: bool = False,
+        target: Literal["_blank", "_self", "_parent", "_top"] = "_blank",
     ) -> DeltaGenerator:
         r"""Display a link button element.
 
@@ -512,6 +513,10 @@ class ButtonMixin:
 
             In both cases, if the contents of the button are wider than the
             parent container, the contents will line wrap.
+        target: "_blank", "_self", "_parent", "_top"
+            The target attribure specifies where to open the linked document. Can be one of "_blank", "_self", "_parent", "_top".
+            If None (default), the linked document will be opened in a new window or tab.
+            For more details, you may use `HTML documentation <https://www.w3schools.com/tags/att_a_target.asp>`.
 
         Example
         -------
@@ -539,6 +544,7 @@ class ButtonMixin:
             type=type,
             icon=icon,
             use_container_width=use_container_width,
+            target=target,
         )
 
     @gather_metrics("page_link")
@@ -746,6 +752,7 @@ class ButtonMixin:
         icon: str | None = None,
         disabled: bool = False,
         use_container_width: bool = False,
+        target: Literal["_blank", "_self", "_parent", "_top"] = "_blank",
     ) -> DeltaGenerator:
         link_button_proto = LinkButtonProto()
         link_button_proto.label = label
@@ -753,6 +760,7 @@ class ButtonMixin:
         link_button_proto.type = type
         link_button_proto.use_container_width = use_container_width
         link_button_proto.disabled = disabled
+        link_button_proto.target = target
 
         if help is not None:
             link_button_proto.help = dedent(help)

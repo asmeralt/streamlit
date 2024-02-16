@@ -50,6 +50,7 @@ describe("LinkColumn", () => {
     expect(mockCell.kind).toEqual(GridCellKind.Uri)
     expect(mockCell.data).toEqual("https://streamlit.io")
     expect(mockCell.displayData).toEqual("https://streamlit.io")
+    expect(mockCell.displayTarget).toEqual("_blank")
   })
 
   it.each([
@@ -222,6 +223,24 @@ describe("LinkColumn", () => {
       ...MOCK_LINK_COLUMN_PROPS,
       // eslint-disable-next-line prettier/prettier
       columnTypeOptions: { display_text: "https://(.*?)\\.google.com" },
+    })
+
+    const cell = mockColumn.getCell(
+      "https://roadmap.streamlit.app",
+      true
+    ) as UriCell
+
+    expect(cell.displayData).toBe("https://roadmap.streamlit.app")
+  })
+
+  it("asd", () => {
+    const mockColumn = LinkColumn({
+      ...MOCK_LINK_COLUMN_PROPS,
+      // eslint-disable-next-line prettier/prettier
+      columnTypeOptions: {
+        display_text: "https://(.*?)\\.google.com",
+        target: "_self",
+      },
     })
 
     const cell = mockColumn.getCell(
