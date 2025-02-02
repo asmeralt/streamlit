@@ -16,10 +16,11 @@
 
 /* eslint-disable  @typescript-eslint/no-non-null-assertion */
 
-import { GridCellKind, UriCell } from "@glideapps/glide-data-grid"
+import { GridCellKind } from "@glideapps/glide-data-grid"
 
-import { isErrorCell } from "./utils"
+import { TargetableUriCell } from "../arrowUtils"
 import LinkColumn from "./LinkColumn"
+import { isErrorCell } from "./utils"
 
 const MOCK_LINK_COLUMN_PROPS = {
   id: "1",
@@ -30,6 +31,7 @@ const MOCK_LINK_COLUMN_PROPS = {
   isHidden: false,
   isIndex: false,
   isStretched: false,
+  displayTarget: "_blank",
   arrowType: {
     // The arrow type of the underlying data is
     // not used for anything inside the column.
@@ -46,7 +48,7 @@ describe("LinkColumn", () => {
     expect(mockColumn.id).toEqual(MOCK_LINK_COLUMN_PROPS.id)
     expect(mockColumn.sortMode).toEqual("default")
 
-    const mockCell = mockColumn.getCell("https://streamlit.io") as UriCell
+    const mockCell = mockColumn.getCell("https://streamlit.io") as TargetableUriCell
     expect(mockCell.kind).toEqual(GridCellKind.Uri)
     expect(mockCell.data).toEqual("https://streamlit.io")
     expect(mockCell.displayData).toEqual("https://streamlit.io")
@@ -138,7 +140,7 @@ describe("LinkColumn", () => {
       columnTypeOptions: { validate: "[" }, // Invalid regex
     })
 
-    const cell = mockColumn.getCell("test", true) as UriCell
+    const cell = mockColumn.getCell("test", true) as TargetableUriCell
     expect(isErrorCell(cell)).toEqual(true)
     expect(cell.data).toContain("Invalid validate regex")
   })
@@ -159,7 +161,7 @@ describe("LinkColumn", () => {
       columnTypeOptions: { display_text: "Click me" },
     })
 
-    const cell = mockColumn.getCell("https://streamlit.io", true) as UriCell
+    const cell = mockColumn.getCell("https://streamlit.io", true) as TargetableUriCell
 
     const cellValue = mockColumn.getCellValue(cell)
     expect(cellValue).toBe("https://streamlit.io")
@@ -172,7 +174,7 @@ describe("LinkColumn", () => {
       columnTypeOptions: { display_text: undefined },
     })
 
-    const cell = mockColumn.getCell("https://streamlit.io", true) as UriCell
+    const cell = mockColumn.getCell("https://streamlit.io", true) as TargetableUriCell
 
     expect(cell.displayData).toBe("https://streamlit.io")
   })
@@ -183,7 +185,7 @@ describe("LinkColumn", () => {
       columnTypeOptions: { display_text: "streamlit" },
     })
 
-    const cell = mockColumn.getCell("https://streamlit.io", true) as UriCell
+    const cell = mockColumn.getCell("https://streamlit.io", true) as TargetableUriCell
 
     expect(cell.displayData).toBe("streamlit")
   })
@@ -197,7 +199,7 @@ describe("LinkColumn", () => {
     const cell = mockColumn.getCell(
       "https://roadmap.streamlit.app",
       true
-    ) as UriCell
+    ) as TargetableUriCell
 
     expect(cell.displayData).toBe("roadmap")
   })
@@ -213,7 +215,7 @@ describe("LinkColumn", () => {
     const cell = mockColumn.getCell(
       "https://streamlit.app?app=foo%20app%20%25",
       true
-    ) as UriCell
+    ) as TargetableUriCell
 
     expect(cell.displayData).toBe("foo app %")
   })
@@ -228,7 +230,7 @@ describe("LinkColumn", () => {
     const cell = mockColumn.getCell(
       "https://roadmap.streamlit.app",
       true
-    ) as UriCell
+    ) as TargetableUriCell
 
     expect(cell.displayData).toBe("https://roadmap.streamlit.app")
   })
@@ -246,7 +248,7 @@ describe("LinkColumn", () => {
     const cell = mockColumn.getCell(
       "https://roadmap.streamlit.app",
       true
-    ) as UriCell
+    ) as TargetableUriCell
 
     expect(cell.displayData).toBe("https://roadmap.streamlit.app")
   })

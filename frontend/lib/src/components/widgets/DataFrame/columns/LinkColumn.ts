@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-import { GridCell, GridCellKind, UriCell } from "@glideapps/glide-data-grid"
+import { GridCell, GridCellKind } from "@glideapps/glide-data-grid"
 
 import { isNullOrUndefined } from "@streamlit/lib/src/util/utils"
+import { TargetableUriCell } from "../arrowUtils"
 
 import {
   BaseColumn,
@@ -83,7 +84,7 @@ function LinkColumn(props: BaseColumnProps): BaseColumn {
     displayData: "",
     displayTarget: "_blank",
     copyData: "",
-  } as UriCell
+  } as TargetableUriCell
 
   const validateInput = (href?: string): boolean => {
     if (isNullOrUndefined(href)) {
@@ -123,8 +124,8 @@ function LinkColumn(props: BaseColumnProps): BaseColumn {
           ...cellTemplate,
           data: null as any,
           isMissingValue: true,
-          onClickUri: () => {},
-        } as UriCell
+          onClickUri: () => { },
+        } as TargetableUriCell
       }
 
       const href: string = data
@@ -173,9 +174,9 @@ function LinkColumn(props: BaseColumnProps): BaseColumn {
           a.preventDefault()
         },
         copyData: href,
-      } as UriCell
+      } as TargetableUriCell
     },
-    getCellValue(cell: UriCell): string | null {
+    getCellValue(cell: TargetableUriCell): string | null {
       return isNullOrUndefined(cell.data) ? null : cell.data
     },
   }

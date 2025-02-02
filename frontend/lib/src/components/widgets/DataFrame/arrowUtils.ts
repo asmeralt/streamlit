@@ -55,6 +55,11 @@ import {
   TimeColumn,
 } from "./columns"
 
+
+export interface TargetableUriCell extends UriCell {
+  displayTarget: "_blank"
+}
+
 /**
  * Extracts a CSS property value from a given CSS style string by using a regex.
  *
@@ -261,9 +266,9 @@ export function getColumnFromArrow(
   const group =
     columnHeaderNames.length > 1
       ? columnHeaderNames
-          .filter(column => column !== "")
-          .slice(0, -1)
-          .join(" / ")
+        .filter(column => column !== "")
+        .slice(0, -1)
+        .join(" / ")
       : undefined
 
   let arrowType = data.types.data[columnPosition]
@@ -383,12 +388,12 @@ export function getCellFromArrow(
     cellTemplate = column.getCell(
       notNullOrUndefined(arrowCell.content)
         ? removeLineBreaks(
-            Quiver.format(
-              arrowCell.content,
-              arrowCell.contentType,
-              arrowCell.field
-            )
+          Quiver.format(
+            arrowCell.content,
+            arrowCell.contentType,
+            arrowCell.field
           )
+        )
         : null
     )
   } else if (
@@ -429,10 +434,10 @@ export function getCellFromArrow(
     const decimalStr = isNullOrUndefined(arrowCell.content)
       ? null
       : Quiver.format(
-          arrowCell.content,
-          arrowCell.contentType,
-          arrowCell.field
-        )
+        arrowCell.content,
+        arrowCell.contentType,
+        arrowCell.field
+      )
     cellTemplate = column.getCell(decimalStr)
   } else {
     cellTemplate = column.getCell(arrowCell.content)
@@ -477,7 +482,7 @@ export function getCellFromArrow(
         cellTemplate = {
           ...cellTemplate,
           displayData,
-        } as UriCell
+        } as TargetableUriCell
       } else if (
         cellTemplate.kind === GridCellKind.Custom &&
         (cellTemplate as DatePickerType).data?.kind === "date-picker-cell" &&
