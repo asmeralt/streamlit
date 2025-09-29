@@ -390,9 +390,9 @@ class ColumnTypesTest(unittest.TestCase):
     def test_link_column(self):
         """Test LinkColumn creation."""
 
-        assert remove_none_values(LinkColumn()) == {"type_config": {"type": "link"}}, (
-            "Should only have the type defined and nothing else."
-        )
+        assert remove_none_values(LinkColumn(target="_blank")) == {
+            "type_config": {"type": "link", "target": "_blank"}
+        }, "Should have the defined type and target and nothing else."
 
         assert remove_none_values(
             LinkColumn(
@@ -406,6 +406,7 @@ class ColumnTypesTest(unittest.TestCase):
                 max_chars=100,
                 validate="^[a-zA-Z]+$",
                 display_text="streamlit",
+                target="_self",
             )
         ) == {
             "label": "Col1",
@@ -420,6 +421,7 @@ class ColumnTypesTest(unittest.TestCase):
                 "max_chars": 100,
                 "validate": "^[a-zA-Z]+$",
                 "display_text": "streamlit",
+                "target": "_self",
             },
         }, "Should have all the properties defined."
 

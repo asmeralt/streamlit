@@ -19,15 +19,7 @@ import os
 from dataclasses import dataclass
 from pathlib import Path
 from textwrap import dedent
-from typing import (
-    TYPE_CHECKING,
-    BinaryIO,
-    Final,
-    Literal,
-    TextIO,
-    Union,
-    cast,
-)
+from typing import TYPE_CHECKING, BinaryIO, Final, Literal, TextIO, Union, cast
 
 from typing_extensions import TypeAlias
 
@@ -602,6 +594,7 @@ class ButtonMixin:
         disabled: bool = False,
         use_container_width: bool | None = None,
         width: Width = "content",
+        target: Literal["_blank", "_self", "_parent", "_top"] = "_blank",
     ) -> DeltaGenerator:
         r"""Display a link button element.
 
@@ -679,7 +672,6 @@ class ButtonMixin:
 
             In both cases, if the contents of the button are wider than the
             parent container, the contents will line wrap.
-
             .. deprecated::
                 ``use_container_width`` is deprecated and will be removed in a
                 future release. For ``use_container_width=True``, use
@@ -699,6 +691,11 @@ class ButtonMixin:
               the parent container, the width of the button matches the width
               of the parent container.
 
+        target: "_blank", "_self", "_parent", "_top"
+            The target attribure specifies where to open the linked document. Can be one of "_blank",
+            "_self", "_parent" or "_top".
+            If None (default), the linked document will be opened in a new window or tab.
+            For more details, you may use `HTML documentation <https://www.w3schools.com/tags/att_a_target.asp>`.
         Example
         -------
         >>> import streamlit as st
@@ -728,6 +725,7 @@ class ButtonMixin:
             type=type,
             icon=icon,
             width=width,
+            target=target,
         )
 
     @gather_metrics("page_link")
@@ -981,12 +979,14 @@ class ButtonMixin:
         icon: str | None = None,
         disabled: bool = False,
         width: Width = "content",
+        target: Literal["_blank", "_self", "_parent", "_top"] = "_blank",
     ) -> DeltaGenerator:
         link_button_proto = LinkButtonProto()
         link_button_proto.label = label
         link_button_proto.url = url
         link_button_proto.type = type
         link_button_proto.disabled = disabled
+        link_button_proto.target = target
 
         if help is not None:
             link_button_proto.help = dedent(help)

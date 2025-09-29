@@ -56,6 +56,20 @@ class LinkButtonTest(DeltaGeneratorTestCase):
         c = self.get_delta_from_queue().new_element.link_button
         assert c.type == type
 
+    def test_target(self):
+        """Test that it can be called with target param."""
+        st.link_button("the label", url="https://streamlit.io", target="_self")
+
+        c = self.get_delta_from_queue().new_element.link_button
+        assert c.target == "_self"
+
+    def test_target_is_blank_by_default(self):
+        """Test target is "_blank" by default."""
+        st.link_button("the label", url="https://streamlit.io")
+
+        c = self.get_delta_from_queue().new_element.link_button
+        assert c.target == "_blank"
+
     def test_emoji_icon(self):
         """Test that it can be called with an emoji icon."""
         st.link_button("the label", url="https://streamlit.io", icon="🎈")

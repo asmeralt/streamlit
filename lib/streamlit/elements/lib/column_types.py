@@ -46,6 +46,7 @@ NumberFormat: TypeAlias = Literal[
 ]
 
 ColumnWidth: TypeAlias = Union[Literal["small", "medium", "large"], int]
+Target: TypeAlias = Literal["_blank", "_self", "_parent", "_top"]
 
 # Type alias that represents all available column types
 # which are configurable by the user.
@@ -150,6 +151,7 @@ class SelectboxColumnConfig(TypedDict):
 
 class LinkColumnConfig(TypedDict):
     type: Literal["link"]
+    target: NotRequired[Target | None]
     max_chars: NotRequired[int | None]
     validate: NotRequired[str | None]
     display_text: NotRequired[str | None]
@@ -739,6 +741,7 @@ def LinkColumn(
     max_chars: int | None = None,
     validate: str | None = None,
     display_text: str | None = None,
+    target: Target | None = None,
 ) -> ColumnConfig:
     r"""Configure a link column in ``st.dataframe`` or ``st.data_editor``.
 
@@ -829,6 +832,13 @@ def LinkColumn(
         Text formatting from ``column_config`` always takes precedence over
         text formatting from ``pandas.Styler``.
 
+    target: "_blank", "_self", "_parent", "_top"
+        The target attribure specifies where to open the linked document. Can be one of "_blank",
+        "_self", "_parent" or "_top".
+        If None (default), the linked document will be opened in a new window or tab.
+        For more details, you may use `HTML documentation <https://www.w3schools.com/tags/att_a_target.asp>`.
+
+
     Examples
     --------
     >>> import pandas as pd
@@ -888,6 +898,7 @@ def LinkColumn(
             max_chars=max_chars,
             validate=validate,
             display_text=display_text,
+            target=target,
         ),
     )
 
