@@ -21,8 +21,8 @@ INSTALL_TEST_REQS ?= true
 USE_CONSTRAINTS_FILE ?= true
 PYTHON_VERSION := $(shell python --version | cut -d " " -f 2 | cut -d "." -f 1-2)
 GITHUB_REPOSITORY ?= streamlit/streamlit
-CONSTRAINTS_BRANCH ?= constraints-develop
-CONSTRAINTS_URL ?= https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/${CONSTRAINTS_BRANCH}/constraints-${PYTHON_VERSION}.txt
+STREAMLIT_VERSION ?= 1.41.1
+CONSTRAINTS_URL ?= https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/refs/tags/constraints/${STREAMLIT_VERSION}/constraints-${PYTHON_VERSION}.txt
 
 # Black magic to get module directories
 PYTHON_MODULES := $(foreach initpy, $(foreach dir, $(wildcard lib/*), $(wildcard $(dir)/__init__.py)), $(realpath $(dir $(initpy))))
